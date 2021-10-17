@@ -36,6 +36,8 @@ sudo usermod -aG docker $USER
 
 id -nG
 
+su - ubuntu
+
 ## Step 8. Check Docker version
 docker --version
 
@@ -65,10 +67,8 @@ tar -xvf go1.12.9.linux-amd64.tar.gz
 sudo mv go /usr/local
 
 ## Step 4. Update environment variables
-nano ~/.profile
-
-export GOPATH=$HOME/go
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+echo 'export GOPATH=$HOME/go' >>~/.profile
+echo 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin' >>~/.profile
 
 source ~/.profile
 
@@ -100,6 +100,6 @@ curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.7 1.4.7 0.4.20
 ## Step 3. Update environment variable
 nano ~/.profile
 
-export PATH=/home/ubuntu/hyperledger/fabric-samples/bin:$PATH
+echo 'export PATH=/home/ubuntu/hyperledger/fabric-samples/bin:$PATH' >>~/.profile
 
 source ~/.profile
