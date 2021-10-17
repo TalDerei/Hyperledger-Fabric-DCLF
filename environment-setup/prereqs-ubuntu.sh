@@ -36,8 +36,6 @@ sudo usermod -aG docker $USER
 
 id -nG
 
-su - ubuntu
-
 ## Step 8. Check Docker version
 docker --version
 
@@ -75,6 +73,8 @@ source ~/.profile
 ## Step 5. Check go version
 go version
 
+## Step 6. Remove go tarball
+rm go1.12.9.linux-amd64.tar.gz
 
 # Node.js and NPM
 ## Step 1. Install the Node.js v10.x repository
@@ -89,17 +89,3 @@ node -v
 ## Step 4. Check NPM version
 npm -v
 
-
-# Hyperledger Samples, Binaries and Docker Images
-## Step 1. Change directory
-cd ..
-
-## Step 2. Download Fabric v1.4.7
-curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.7 1.4.7 0.4.20
-
-## Step 3. Update environment variable
-nano ~/.profile
-
-echo 'export PATH=/home/ubuntu/hyperledger/fabric-samples/bin:$PATH' >>~/.profile
-
-source ~/.profile
