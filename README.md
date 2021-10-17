@@ -12,7 +12,10 @@ Hyperledger Samples, Binaries and Docker Images
 OS packages and dependencies
 
 ```couchDB```
-Access the couchDB state database interface
+Access the couchDB state database web interface
 
 ```blockchain-explorer```
-Access the hyperledger blockchain-explorer
+Access the hyperledger blockchain-explorer web interface
+
+```fabric-chaincode-evm```
+EVM wrapper for hyperledger to execute EVM compatabible smart contracts written in solidity
