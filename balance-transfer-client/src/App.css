@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+}
+
+.Buttons {
+  margin: auto;
+  width: 90%;
+  display: flexbox;
+  flex-direction: row;
+}
+
+button {
+  text-align: center;
+  width: 40%;
+  height: 40px;
+  margin: 4px;
+  border: 0.16em solid black;
+}
+
+button:hover {
+  cursor: pointer;
+}
