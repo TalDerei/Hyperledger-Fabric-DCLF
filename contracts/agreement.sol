@@ -29,8 +29,13 @@ contract agreement {
         return false;
     }
 
-    function deny() public isCoordinator{
-        selfdestruct(party);
+    //will not allow the coordinator to destruct the agreement once approved
+    function deny() public isCoordinator returns(bool){
+        if(status == false){
+            selfdestruct(party);
+            return true;
+        }
+        return false;
     }
 
     function getAgreement() public view returns(string memory) {
