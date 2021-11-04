@@ -11,15 +11,9 @@ contract agreement {
         require(msg.sender == coordinator, "Only the coordinator can call this function.");
         _;
     }
-
-    modifier isParty() {
-        require(msg.sender == party, "Only the party can call this function.");
-        _;
-    }
     
     string link = "some link to a predetermined agreement template";
     string agreement_content;
-    string public_agreement = "agreement is not public";
     
 
     constructor(string memory _title, string memory _entity){
@@ -39,12 +33,8 @@ contract agreement {
         selfdestruct(party);
     }
 
-    function makePublic() public isParty{
-        public_agreement = agreement_content;
-    }
-
     function getAgreement() public view returns(string memory) {
-        return public_agreement;
+        return agreement_content;
     }
 
     function getAddress() public view returns(address){
