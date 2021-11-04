@@ -1,46 +1,28 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
-// This is allow me to return struct after the smart contract is called
-pragma experimental ABIEncoderV2;
 
 contract Copyright {
     //store the address of the coordinator
-    address private coordinator = 0xd27fbEC844d2c6dA0f14Ab3f4B95fbB48fa7bFE1;
+    address private coordinator;
     
     //check if the message sender is the coordinator
-    //will this not allow anyone not the coordinator to call get functions? We might want to allow those kind of operations
     modifier isCoordinator() {
         require(msg.sender == coordinator, "Only the coordinator can call this function.");
         _;
     }
     
     //information pertaining to the copyright claim
-    struct claimant{
-        string name;
-        string transfer_type;
-        string location;
-        int share;
-    }
-
-    struct author{
-        string name;
-        string domicile;
-        string[] citizenship;
-        string[] authorship;
-    }
-    struct contact{
-        string name;
-        string cell;
-        string location;
-    }
     string registrationNumber;
     uint registrationDate;
-    uint registrationBlockTime;
     string title;
-    claimant[] claimants;
-    author[] authors;
-    contact[] contacts;
+    //format: index {index} name {name} transfer_type {transfer_type} location {location} share {share}
+    string[] claimants;
+    //format: index {index} name {name} domicile {domicile} citizenship {count} {citizenship} authorship {count} {authorship}
+    string[] authors;
+    //format: index {index} name {name} cell {cell} location {location}
+    string[] contacts;
+    string[] link;
     
     //information pertaining to the work itself
     struct track {
@@ -49,46 +31,25 @@ contract Copyright {
         string genre;
         uint runtime;
     }
-    
     track tr;
     
-    //I found out about ABIEncoderV2 after I finished this part, should I change the construtor input to struct, too?
-    constructor(string memory _registrationNumber, uint _registrationDate, string memory _title, 
-                    string[] memory climant_names, string[] memory climant_transfer_types, 
-                    string[] memory climant_locations, int[] memory climant_shares, string[] memory author_names, 
-                    string[] memory domicile, string[][] memory citzenships, string[][] memory authorships,
-                    string[] memory contact_names, string[] memory contact_cells, string[] memory contact_location,
-                    string memory _album, string memory _genre, uint _runtime) {
+    constructor(string memory _registrationNumber, uint _registrationDate, string memory _title, string[] memory _claimants, string[] memory _authors, string[] memory _contact,
+                    string memory _album, string memory _genre, uint _runtime, string[] memory _link) {
+        //coordinator = msg.sender;
         coordinator = msg.sender;
         registrationNumber = _registrationNumber;
         registrationDate = _registrationDate;
-        registrationBlockTime = block.timestamp;
         title = _title;
-        if(climant_names.length == climant_transfer_types.length 
-            && climant_names.length == climant_locations.length 
-            && climant_names.length == climant_shares.length){
-            if(author_names.length == domicile.length
-                && author_names.length == citzenships.length
-                && author_names.length == authorships.length){
-                    if(contact_names.length == contact_cells.length
-                        && contact_names.length == contact_location.length){
-                        // only perform the action when all length match. Is there a better way to match this?
-                        for(uint i = 0; i < climant_names.length; i++){
-                            claimants[i] = claimant(climant_names[i], climant_transfer_types[i], climant_locations[i], climant_shares[i]);
-                        }
-                        for(uint i = 0; i < author_names.length; i++){
-                            authors[i] = author(author_names[i], domicile[i], citzenships[i], authorships[i]);
-                        }
-                        for(uint i = 0; i < contact_names.length; i++){
-                            contacts[i] = contact(contact_names[i], contact_cells[i], contact_location[i]);
-                        }
-                        tr = track({title: _title, album: _album, genre: _genre, runtime: _runtime});
-                    }
-
-            }
-        }
+        claimants = _claimants;
+        authors = _authors;
+        contacts = _contact;
+        link = _link;
+        
+        tr = track({title: _title, album: _album, genre: _genre, runtime: _runtime});
     }
     
+    //TODO: Is it cheaper to slice the data and be able to return individual content in claimants, authors, contacts here or return whole thing (computation vs data size)
+
     function getRegistrationNumber() public view returns(string memory) {
         return registrationNumber;
     }
@@ -100,16 +61,17 @@ contract Copyright {
     function getTitle() public view returns(string memory) {
         return title;
     }
+    
 
-    function getClaimants() public view returns(claimant[] memory) {
+    function getClaimants() public view returns(string[] memory) {
         return claimants;
     }
     
-    function addClaimant(claimant memory _claimant) public isCoordinator {
-        claimants[claimants.length] = _claimant;
+    function addClaimant(string memory _claimant) public isCoordinator {
+        claimants.push(_claimant);
+        //claimants[claimants.length] = _claimant;
     }
     
-    // why should we drop by index? We might want to change it so that it drops by name
     function dropClaimant(uint _index) public isCoordinator returns(bool) {
         if (_index >= claimants.length) {
             return false;
@@ -122,16 +84,76 @@ contract Copyright {
         return true;
     }
     
-    function getAuthors() public view returns(author[] memory) {
+
+    function getAuthors() public view returns(string[] memory) {
         return authors;
     }
-    
-    function getContact() public view returns(contact[] memory) {
-        return contacts;
+
+    //the commented line has some "payable" issue
+    function addAuthors(string memory _authors) public isCoordinator {
+        authors.push(_authors);
+        //claimants[claimants.length] = _claimant;
     }
     
+    function dropAuthors(uint _index) public isCoordinator returns(bool) {
+        if (_index >= authors.length) {
+            return false;
+        }
+        
+        for (uint i = _index; i < authors.length - 1; i++) {
+            authors[i] = authors[i + 1];
+        }
+        delete authors[authors.length - 1];
+        return true;
+    }
+
+
+    function getContact() public view returns(string[] memory) {
+        return contacts;
+    }
+
+    function addContact(string memory _contacts) public isCoordinator {
+        contacts.push(_contacts);
+        //claimants[claimants.length] = _claimant;
+    }
+    
+    function dropContact(uint _index) public isCoordinator returns(bool) {
+        if (_index >= contacts.length) {
+            return false;
+        }
+        
+        for (uint i = _index; i < contacts.length - 1; i++) {
+            contacts[i] = contacts[i + 1];
+        }
+        delete contacts[contacts.length - 1];
+        return true;
+    }
+
+
     function getTrack() public view returns(track memory) {
         return tr;
+    }
+
+
+    function getLink() public view returns(string[] memory){
+        return link;
+    }
+
+    function addLink(string memory _link) public isCoordinator {
+        link.push(_link);
+        //claimants[claimants.length] = _claimant;
+    }
+    
+    function dropLink(uint _index) public isCoordinator returns(bool) {
+        if (_index >= link.length) {
+            return false;
+        }
+        
+        for (uint i = _index; i < link.length - 1; i++) {
+            link[i] = link[i + 1];
+        }
+        delete link[link.length - 1];
+        return true;
     }
 
 }
