@@ -23,6 +23,7 @@ contract Copyright {
     //format: index {index} name {name} cell {cell} location {location}
     string[] contacts;
     string[] link;
+    uint256 contractAddress;
     
     //information pertaining to the work itself
     struct track {
@@ -34,7 +35,7 @@ contract Copyright {
     track tr;
     
     constructor(string memory _registrationNumber, uint _registrationDate, string memory _title, string[] memory _claimants, string[] memory _authors, string[] memory _contact,
-                    string memory _album, string memory _genre, uint _runtime, string[] memory _link) {
+                    string memory _album, string memory _genre, uint _runtime, string[] memory _link, uint256 _contractAddress) {
         //coordinator = msg.sender;
         coordinator = msg.sender;
         registrationNumber = _registrationNumber;
@@ -44,6 +45,7 @@ contract Copyright {
         authors = _authors;
         contacts = _contact;
         link = _link;
+        contractAddress = _contractAddress;
         
         tr = track({title: _title, album: _album, genre: _genre, runtime: _runtime});
     }
@@ -154,6 +156,10 @@ contract Copyright {
         }
         delete link[link.length - 1];
         return true;
+    }
+
+    function getContractAddress() public view returns(uint256){
+        return contractAddress;
     }
 
 }
