@@ -2,8 +2,8 @@
 ## Step 1. Change directory
 cd ..
 
-## Step 2. Download Fabric v1.4.7
-curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.7 1.4.7 0.4.20
+## Step 2. Download Fabric v2.2.0 (LTS)
+curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
 
 ## Step 3. Update environment variable
 nano ~/.profile

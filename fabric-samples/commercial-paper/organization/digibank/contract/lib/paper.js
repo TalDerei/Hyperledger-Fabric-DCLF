@@ -1,5 +1,7 @@
 /*
-SPDX-License-Identifier: Apache-2.0
+ * Copyright IBM Corp. All Rights Reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
 */
 
 'use strict';
@@ -10,8 +12,9 @@ const State = require('./../ledger-api/state.js');
 // Enumerate commercial paper state values
 const cpState = {
     ISSUED: 1,
-    TRADING: 2,
-    REDEEMED: 3
+    PENDING: 2,
+    TRADING: 3,
+    REDEEMED: 4
 };
 
 /**
@@ -40,6 +43,14 @@ class CommercialPaper extends State {
         return this.owner;
     }
 
+    setOwnerMSP(mspid) {
+        this.mspid = mspid;
+    }
+
+    getOwnerMSP() {
+        return this.mspid;
+    }
+
     setOwner(newOwner) {
         this.owner = newOwner;
     }
@@ -59,6 +70,10 @@ class CommercialPaper extends State {
         this.currentState = cpState.REDEEMED;
     }
 
+    setPending() {
+        this.currentState = cpState.PENDING;
+    }
+
     isIssued() {
         return this.currentState === cpState.ISSUED;
     }
@@ -69,6 +84,10 @@ class CommercialPaper extends State {
 
     isRedeemed() {
         return this.currentState === cpState.REDEEMED;
+    }
+
+    isPending() {
+        return this.currentState === cpState.PENDING;
     }
 
     static fromBuffer(buffer) {

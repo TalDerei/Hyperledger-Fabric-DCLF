@@ -110,16 +110,11 @@ and run a swap transaction flow from creation to settlement.
 ### Prerequisites
 
 The following prerequisites are needed to run this sample:
-* You need to run this sample from your GOPATH. If you have downloaded the
-  `fabric-samples` directory outside your GOPATH, then you need to copy or
-  move the interest rate sample into your GOPATH.
 * Fabric docker images. By default the `network/network.sh` script will look for
   fabric images with the `latest` tag, this can be adapted with the `-i` command
   line parameter of the script.
 * A local installation of `configtxgen` and `cryptogen` in the `PATH` environment,
   or included in `fabric-samples/bin` directory.
-* Vendoring the chaincode. In the `chaincode` directory, run `govendor init` and
-  `govendor add +external` to vendor the shim from your local copy of fabric.
 
 ### Bringing up the network
 
@@ -138,10 +133,11 @@ commands in the following section.
 
 ### Transactions
 
-The chaincode is instantiated as follows:
+The chaincode is initialized as follows:
 ```
-peer chaincode instantiate -o irs-orderer:7050 -C irs -n irscc -l golang -v 0 -c '{"Args":["init","auditor","1000000","rrprovider","myrr"]}' -P "AND(OR('partya.peer','partyb.peer','partyc.peer'), 'auditor.peer')"
+peer chaincode invoke -o irs-orderer:7050 --isInit -C irs --waitForEvent -n irscc --peerAddresses irs-rrprovider:7051 --peerAddresses irs-partya:7051 --peerAddresses irs-partyb:7051 --peerAddresses irs-partyc:7051 --peerAddresses irs-auditor:7051 -c '{"Args":["init","auditor","1000000","rrprovider","myrr"]}'
 ```
+
 This sets an auditing threshold of 1M, above which the `auditor` organization
 needs to be involved. It also specifies the `myrr` reference rate provided by
 the `rrprovider` organization.
@@ -155,7 +151,7 @@ specified as providing this reference rate in the init parameters.
 
 To create a swap named "myswap":
 ```
-peer chaincode invoke -o irs-orderer:7050 -C irs --waitForEvent -n irscc --peerAddresses irs-partya:7051 --peerAddresses irs-partyb:7051 --peerAddresses irs-auditor:7051 -c '{"Args":["createSwap","myswap","{\"StartDate\":\"2018-09-27T15:04:05Z\",\"EndDate\":\"2018-09-30T15:04:05Z\",\"PaymentInterval\":395,\"PrincipalAmount\":100000,\"FixedRate\":400,\"FloatingRate\":500,\"ReferenceRate\":\"myrr\"}", "partya", "partyb"]}'
+peer chaincode invoke -o irs-orderer:7050 -C irs --waitForEvent -n irscc --peerAddresses irs-partya:7051 --peerAddresses irs-partyb:7051 --peerAddresses irs-auditor:7051 -c '{"Args":["createSwap","myswap","{\"StartDate\":\"2018-09-27T15:04:05Z\",\"EndDate\":\"2018-09-30T15:04:05Z\",\"PaymentInterval\":395,\"PrincipalAmount\":100000,\"FixedRateBPS\":400,\"FloatingRateBPS\":500,\"ReferenceRate\":\"myrr\"}", "partya", "partyb"]}'
 ```
 Note that the transaction is endorsed by both parties that are part of this
 swap as well as the auditor. Since the principal amount in this case is lower

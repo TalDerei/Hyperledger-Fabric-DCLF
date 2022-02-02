@@ -1,5 +1,7 @@
 /*
-SPDX-License-Identifier: Apache-2.0
+ * Copyright IBM Corp. All Rights Reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
 */
 
 'use strict';
@@ -42,7 +44,7 @@ class StateList {
     async getState(key) {
         let ledgerKey = this.ctx.stub.createCompositeKey(this.name, State.splitKey(key));
         let data = await this.ctx.stub.getState(ledgerKey);
-        if (data){
+        if (data && data.toString('utf8')) {
             let state = State.deserialize(data, this.supportedClasses);
             return state;
         } else {

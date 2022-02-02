@@ -9,7 +9,7 @@ volumes:
 networks:
   mynetwork.com:
     external:
-      name: net_byfn
+      name: net_test
 
 services:
 
@@ -47,7 +47,7 @@ services:
       - DISCOVERY_AS_LOCALHOST=false
     volumes:
       - ./config.json:/opt/explorer/app/platform/fabric/config.json
-      - ./connection-profile:/opt/explorer/app/platform/fabric/connection-profile
+      - ./test-network.json:/opt/explorer/app/platform/fabric/test-network.json
       - ./organizations:/tmp/crypto
       - walletstore:/opt/explorer/wallet
     ports:
