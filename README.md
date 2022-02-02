@@ -19,3 +19,6 @@ Access the hyperledger blockchain-explorer web interface
 
 ```fabric-chaincode-evm```
 EVM wrapper for hyperledger to execute EVM compatabible smart contracts written in solidity
+
+```sdk```
+Containing our user-facing application and collection of API endpoints to query chaincode (smart contracts) and the hyperledger chain
