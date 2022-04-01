@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	sc "github.com/hyperledger/fabric/protos/peer"
 )
 
 // SmartContract provides functions for managing an Asset
@@ -71,7 +73,50 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
-// Mint creates a new copyright and store in world state with given id
+// Invoke routes incoming requests to this smart contract to the proper function
+func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response {
+	function, args := APIStub.GetFunctionAndParameters()
+	switch function {
+	case "Mint":
+		return s.Mint(args[0], args[1], args[2])
+		break
+	case "ReadAsset":
+		res, _ := s.ReadAsset(args[0], args[1])
+		return res
+		break
+	case "UpdateRegistrationNumber":
+		return s.UpdateRegistrationNumber(args[0], args[1], args[2])
+		break
+	case "UpdateRegistrationDate":
+		return s.UpdateRegistrationDate(args[0], args[1], args[2])
+		break
+	case "AddAuthor":
+		return s.AddAuthor(args[0], args[1], args[2])
+		break
+	case "UpdateLegalContractURL":
+		return s.UpdateLegalContractURL(args[0], args[1], args[2])
+		break
+	case "UpdateAlternativeSourceURL":
+		return s.UpdateAlternativeSourceURL(args[0], args[1], args[2])
+		break
+	case "DeleteAsset":
+		return s.DeleteAsset(args[0], args[1])
+		break
+	case "AssetExists":
+		res, _ := s.AssetExists(args[0], args[1])
+		return res
+		break
+	case "TransferAsset":
+		return s.TransferAsset(args[0], args[1], args[2])
+		break
+	case "GetAllAssets":
+		res, _ := s.GetAllAssets(args[0])
+		return res
+	}
+	return "Invalid function call"
+}
+
+// Mint creates a new copyright and stores it in world state with given id
 func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, id string, description string) error {
 	exists, err := s.AssetExists(ctx, id)
 	if err != nil {
@@ -157,7 +202,7 @@ func (s *SmartContract) UpdateRegistrationDate(ctx contractapi.TransactionContex
 	return ctx.GetStub().PutState(id, assetJSON)
 }
 
-func (s *SmartContract) addAuthor(ctx contractapi.TransactionContextInterface, id string, newAuthor string) error {
+func (s *SmartContract) AddAuthor(ctx contractapi.TransactionContextInterface, id string, newAuthor string) error {
 	exists, err := s.AssetExists(ctx, id)
 	if err != nil {
 		return err
