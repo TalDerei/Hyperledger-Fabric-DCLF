@@ -1,22 +1,58 @@
 package chaincode
 
 import (
-	"crypto"
-	"crypto/rsa"
-	"crypto/x509"
+	"bytes"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"math/big"
 	"strconv"
 	"strings"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
-func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterface, msg string, sig []byte, msgHashSum []uint8, marshaledPublicKey []byte) string {
-	// Unmarshal public key
-	unmarshaledPublicKey, err := x509.ParsePKCS1PublicKey(marshaledPublicKey)
+type Retriever struct {
+	CurveParams *elliptic.CurveParams `json:"Curve"`
+	MyX         string                `json:"X"`
+	MyY         string                `json:"Y"`
+}
+
+func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterface, msg string, sig []byte, msgHashSum []byte, marshaledPublicKey []byte) string {
+	// Hash message and compare to hash passed from client
+	testMsgHash := sha256.Sum256([]byte(msg))
+	if bytes.Compare(msgHashSum, testMsgHash[:]) != 0 {
+		return "Invalid message hash."
+	}
+
+	// Use retriever struct to unmarshal json, then copy fields to EC public key struct
+	retriever := new(Retriever)
+
+	err := json.Unmarshal(marshaledPublicKey, &retriever)
+	if err != nil {
+		return "Unmarshal failed."
+	}
+
+	var unmarshaledECPublicKey ecdsa.PublicKey
+	unmarshaledECPublicKey.Curve = retriever.CurveParams
+	newX := new(big.Int)
+	newX, ok := newX.SetString(retriever.MyX, 10)
+	if !ok {
+		fmt.Println("SetString X failed")
+	}
+	newY := new(big.Int)
+	newY, ok = newY.SetString(retriever.MyY, 10)
+	if !ok {
+		fmt.Println("SetString Y failed")
+	}
+	unmarshaledECPublicKey.X = newX
+	unmarshaledECPublicKey.Y = newY
 
 	// verify that the message was signed using the private key corresponding to the public key
-	err = VerifyMessageSignature(msg, msgHashSum, sig, unmarshaledPublicKey)
-	if err != nil {
+	valid := ecdsa.VerifyASN1(&unmarshaledECPublicKey, msgHashSum[:], sig)
+	if !valid {
 		return "Message singature is not valid."
 	}
 
@@ -37,8 +73,4 @@ func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterfa
 	// call chaincode
 	res := ctx.GetStub().InvokeChaincode(chaincodeName, paramsBytes, ctx.GetStub().GetChannelID())
 	return res.GetMessage()
-}
-
-func VerifyMessageSignature(msg string, msgHashSum []uint8, sig []byte, publicKey *rsa.PublicKey) error {
-	return rsa.VerifyPSS(publicKey, crypto.SHA256, msgHashSum, sig, nil)
 }
