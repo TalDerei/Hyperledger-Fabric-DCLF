@@ -16,7 +16,7 @@ contract GovernorContract is
 {
     uint256 public s_votingDelay;
     uint256 public s_votingPeriod;
-
+    event LedgerCall(uint256 indexed id, address proposer, uint256[] values, bytes[] calldatas);
     constructor(
         ERC20Votes _token,
         TimelockController _timelock,
@@ -86,7 +86,17 @@ contract GovernorContract is
         bytes[] memory calldatas,
         bytes32 descriptionHash
     ) internal override(Governor, GovernorTimelockControl) {
-        super._execute(proposalId, targets, values, calldatas, descriptionHash);
+        string memory errorMessage = "Governor: call reverted without message";
+        // Checking if the proposal is a Ledger specific call (all ledger calls will have targets 0x0 because chaincode do not correspond the contract to address)
+        for (uint256 i = 0; i < targets.length; ++i) {
+            if(targets[i] == 0x0000000000000000000000000000000000000000){
+                emit LedgerCall(proposalID, _msgSender(), values, calldatas);
+            }else{
+                (bool success, bytes memory returndata) = targets[i].call{value: values[i]}(calldatas[i]);
+                Address.verifyCallResult(success, returndata, errorMessage);
+            }
+
+        }
     }
 
     function _cancel(
