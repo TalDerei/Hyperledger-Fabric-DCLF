@@ -107,7 +107,7 @@ func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response 
 		return res
 		break
 	case "TransferAsset":
-		return s.TransferAsset(args[0], args[1], args[2])
+		return s.TransferAsset(args[0], args[1], args[2], args[3])
 		break
 	case "GetAllAssets":
 		res, _ := s.GetAllAssets(args[0])
@@ -295,12 +295,15 @@ func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface,
 }
 
 // TransferAsset updates the owner field of asset with given id in world state.
-func (s *SmartContract) TransferAsset(ctx contractapi.TransactionContextInterface, id string, newOwner string) error {
+func (s *SmartContract) TransferAsset(ctx contractapi.TransactionContextInterface, id string, newOwner string, callerAddress string) error {
 	asset, err := s.ReadAsset(ctx, id)
 	if err != nil {
 		return err
 	}
 
+	if asset.Owner != callerAddress {
+		return fmt.Errorf("Only the owner of this asset can transfer it.")
+	}
 	asset.Owner = newOwner
 	assetJSON, err := json.Marshal(asset)
 	if err != nil {
