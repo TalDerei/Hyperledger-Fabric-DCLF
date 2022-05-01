@@ -1,59 +1,33 @@
 package chaincode
 
 import (
-	"bytes"
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/sha256"
-	"encoding/json"
-	"fmt"
-	"math/big"
 	"strconv"
 	"strings"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+
+	hexutil "github.com/quan8/go-ethereum/common/hexutil"
+	crypto "github.com/quan8/go-ethereum/crypto"
 )
 
-type Retriever struct {
-	CurveParams *elliptic.CurveParams `json:"Curve"`
-	MyX         string                `json:"X"`
-	MyY         string                `json:"Y"`
-}
+func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterface, msg string, sig string, pubKey string) string {
+	hash := crypto.Keccak256Hash(msg)
 
-func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterface, msg string, sig []byte, msgHashSum []byte, marshaledPublicKey []byte) string {
-	// Hash message and compare to hash passed from client
-	testMsgHash := sha256.Sum256([]byte(msg))
-	if bytes.Compare(msgHashSum, testMsgHash[:]) != 0 {
-		return "Invalid message hash."
-	}
-
-	// Use retriever struct to unmarshal json, then copy fields to EC public key struct
-	retriever := new(Retriever)
-
-	err := json.Unmarshal(marshaledPublicKey, &retriever)
+	signature, err := hexutil.Decode(sig)
 	if err != nil {
-		return "Unmarshal failed."
+		return "Error decoding signature"
 	}
 
-	var unmarshaledECPublicKey ecdsa.PublicKey
-	unmarshaledECPublicKey.Curve = retriever.CurveParams
-	newX := new(big.Int)
-	newX, ok := newX.SetString(retriever.MyX, 10)
-	if !ok {
-		fmt.Println("SetString X failed")
+	sigPublicKey, err := hexutil.Decode(pubKey)
+	if err != nil {
+		return "Error decoding public key"
 	}
-	newY := new(big.Int)
-	newY, ok = newY.SetString(retriever.MyY, 10)
-	if !ok {
-		fmt.Println("SetString Y failed")
-	}
-	unmarshaledECPublicKey.X = newX
-	unmarshaledECPublicKey.Y = newY
 
 	// verify that the message was signed using the private key corresponding to the public key
-	valid := ecdsa.VerifyASN1(&unmarshaledECPublicKey, msgHashSum[:], sig)
-	if !valid {
-		return "Message singature is not valid."
+	signatureNoRecoverID := signature[:len(signature)-1] // remove recovery id
+	verified := crypto.VerifySignature(sigPublicKey, hash.Bytes(), signatureNoRecoverID)
+	if !verified {
+		return "Invalid message signature"
 	}
 
 	// parse message

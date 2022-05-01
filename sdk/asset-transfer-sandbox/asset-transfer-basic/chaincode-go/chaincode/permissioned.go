@@ -38,7 +38,7 @@ func (s *SmartContract) DeletePermissionedAddress(ctx contractapi.TransactionCon
 		return err
 	}
 	if !exists {
-		return fmt.Errorf("the address %s does not exist", id)
+		return fmt.Errorf("the address %s does not exist", addr)
 	}
 
 	return ctx.GetStub().DelState(string(addr))
