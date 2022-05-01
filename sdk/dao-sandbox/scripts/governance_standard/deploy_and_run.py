@@ -21,7 +21,7 @@ VOTING_DELAY = 1  # 1 block
 
 # Timelock
 # MIN_DELAY = 3600  # 1 hour - more traditional
-MIN_DELAY = 1  # 1 seconds
+MIN_DELAY = 1 # 1 seconds
 
 # Proposal
 PROPOSAL_DESCRIPTION = "Proposal #1: Store 1 in the Box!"
@@ -176,14 +176,14 @@ def move_blocks(amount):
 
 
 def main():
-    deploy_governor()
-    deploy_box_to_be_governed()
-    proposal_id = propose(NEW_STORE_VALUE)
+    deploy_governor() # deploying the contract (logic + functionlity)
+    deploy_box_to_be_governed() # deploy the Box.sol (thing we're governing store() function)
+    proposal_id = propose(NEW_STORE_VALUE) # hash of all proposal
     print(f"Proposal ID {proposal_id}")
     # We do this just to move the blocks along
     if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         move_blocks(1)
-    vote(proposal_id, 1)
+    vote(proposal_id, 1) # voting
     # Once the voting period is over,
     # if quorum was reached (enough voting power participated)
     # and the majority voted in favor, the proposal is
@@ -193,4 +193,14 @@ def main():
         move_blocks(VOTING_PERIOD)
     # States: {Pending, Active, Canceled, Defeated, Succeeded, Queued, Expired, Executed }
     print(f" This proposal is currently {GovernorContract[-1].state(proposal_id)}")
-    queue_and_execute(NEW_STORE_VALUE)
+    queue_and_execute(NEW_STORE_VALUE) # proposal passes, it gets queued, then after timelock period, prosal is executed
+    
+    # 1. deploy the contracts (do it ourselves)
+        # deploying the DAO contract (logic + functionlity)
+        # deploy the Box.sol (thing we're governing store() function)
+        # deploy the timelock contract 
+        # deploy the ERc-20 contract
+    # 2. propose(): Let token holder propose a proposal (if they meeting the Proposal Threshold)
+    # 3. vote(): voting period
+    # 4. queue_and_execute(): proposal passes, it gets queued, then after timelock period, prosal is executed
+    # 5. emit the changes to be visible on a hyperledger chaincode listener contract
