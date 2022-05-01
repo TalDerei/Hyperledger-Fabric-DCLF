@@ -34,7 +34,7 @@ func (s *SmartContract) ProcessMessage(ctx contractapi.TransactionContextInterfa
 	splitMsg := strings.Split(msg, "_")
 	chaincodeName := splitMsg[0]
 	funcName := splitMsg[1]
-	numParams, _ := strconv.ParseInt(splitMsg[2])
+	numParams, _ := strconv.ParseInt(splitMsg[2], 0, 64)
 	params := splitMsg[3:]
 
 	// prepare params as byte slices
