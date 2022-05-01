@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	sc "github.com/hyperledger/fabric/protos/peer"
 )
 
 type SmartContract struct {
@@ -41,21 +43,38 @@ type License struct {
 	EarlyTerminationInitiator string     `json:"earlyTerminationInitiator"`
 }
 
-// Mint creates a new license and stores it in world state with given id
-func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, copyrightID string, to string, id string, description string) error {
-	exists, err := s.AssetExists(ctx, copyrightID)
-	if err != nil {
-		return err
+func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response {
+	function, args := APIStub.GetFunctionAndParameters()
+	switch function {
+	case "Mint":
+		return s.Mint(args[0], args[1], args[2], args[3], args[4])
+	case "OwnerOf":
+		res, _ := s.OwnerOf(args[0], args[1])
+		return res
+	case "InitiateTermination":
+		return s.InitiateTermination(args[0], args[1], args[2])
+	case "ApproveTermination":
+		return s.ApproveTermination(args[0], args[1], args[2])
+	case "SetURL":
+		return s.setURL(args[0], args[1], args[2])
+	case "ReadAsset":
+		res, _ := s.ReadAsset(args[0], args[1], args[2])
+		return res
 	}
-	if !exists {
-		return fmt.Errorf("Copyright with ID: %s does not exist", copyrightID)
-	}
+	return "Invalid function call"
+}
 
+// Mint creates a new license and stores it in world state with given id
+func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, copyright *Copyright, to string, id string, description string) error {
 	var asset License
-	err = json.Unmarshal([]byte(description), &asset)
+	err := json.Unmarshal([]byte(description), &asset)
 	if err != nil {
 		return fmt.Errorf("asset description format incorrect")
 	}
+
+	asset.ID = id
+	asset.Owner = to
+	asset.Copyright = copyright
 
 	assetJSON, err := json.Marshal(asset)
 	return ctx.GetStub().PutState(id, assetJSON)
@@ -105,6 +124,9 @@ func (s *SmartContract) InitiateTermination(ctx contractapi.TransactionContextIn
 
 	asset.EarlyTerminationInitiator = caller
 	assetJSON, err = json.Marshal(asset)
+	if err != nil {
+		return err
+	}
 	return ctx.GetStub().PutState(tokenId, assetJSON)
 }
 
@@ -135,6 +157,33 @@ func (s *SmartContract) ApproveTermination(ctx contractapi.TransactionContextInt
 	}
 
 	return ctx.GetStub().DelState(tokenId)
+}
+
+// SetURL acts as a one-time setter to bind a license to a legal contract
+func (s *SmartContract) setURL(ctx contractapi.TransactionContextInterface, tokenId string, url string) error {
+	assetJSON, err := ctx.GetStub().GetState(tokenId)
+	if err != nil {
+		return fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if assetJSON == nil {
+		return fmt.Errorf("the asset %s does not exist", tokenId)
+	}
+
+	var asset License
+	err = json.Unmarshal(assetJSON, &asset)
+	if err != nil {
+		return err
+	}
+	if asset.LegalContractURL != "" {
+		return fmt.Errorf("License with ID: %v already has contract URL: %s", err, asset.LegalContractURL)
+	}
+
+	asset.LegalContractURL = url
+	assetJSON, err = json.Marshal(asset)
+	if err != nil {
+		return err
+	}
+	return ctx.GetStub().PutState(tokenId, assetJSON)
 }
 
 // ReadAsset returns the asset stored in the world state with given id.

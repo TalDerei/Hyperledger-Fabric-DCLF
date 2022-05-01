@@ -79,36 +79,26 @@ func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response 
 	switch function {
 	case "Mint":
 		return s.Mint(args[0], args[1], args[2])
-		break
 	case "ReadAsset":
 		res, _ := s.ReadAsset(args[0], args[1])
 		return res
-		break
 	case "UpdateRegistrationNumber":
 		return s.UpdateRegistrationNumber(args[0], args[1], args[2])
-		break
 	case "UpdateRegistrationDate":
 		return s.UpdateRegistrationDate(args[0], args[1], args[2])
-		break
 	case "AddAuthor":
 		return s.AddAuthor(args[0], args[1], args[2])
-		break
 	case "UpdateLegalContractURL":
 		return s.UpdateLegalContractURL(args[0], args[1], args[2])
-		break
 	case "UpdateAlternativeSourceURL":
 		return s.UpdateAlternativeSourceURL(args[0], args[1], args[2])
-		break
 	case "DeleteAsset":
 		return s.DeleteAsset(args[0], args[1])
-		break
 	case "AssetExists":
 		res, _ := s.AssetExists(args[0], args[1])
 		return res
-		break
 	case "TransferAsset":
 		return s.TransferAsset(args[0], args[1], args[2], args[3])
-		break
 	case "GetAllAssets":
 		res, _ := s.GetAllAssets(args[0])
 		return res
