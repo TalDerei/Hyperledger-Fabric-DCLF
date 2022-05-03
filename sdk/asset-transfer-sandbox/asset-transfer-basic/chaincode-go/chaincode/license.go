@@ -1,36 +1,11 @@
-package chaincode
+package dclf
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	sc "github.com/hyperledger/fabric/protos/peer"
 )
-
-type SmartContract struct {
-	contractapi.Contract
-}
-
-type TrackInfo struct {
-	Title   string   `json:"title"`
-	Album   string   `json:"album"`
-	Genres  []string `json:"genres"`
-	Runtime int      `json:"runtime"`
-	Authors []string `json:"authors"`
-}
-
-// Asset describes basic details of what makes up a simple asset
-type Copyright struct {
-	ID                   string     `json:"ID"`
-	RegistrationNumber   string     `json:"registrationNumber"`
-	RegistrationDate     string     `json:"registrationDate"`
-	Owner                string     `json:"owner"`
-	Track                *TrackInfo `json:"track`
-	LegalContractURL     string     `json:"legalContractUrl"`
-	AlternativeSourceURL string     `json:"alternativeSourceURL"`
-}
 
 type License struct {
 	ID                        string     `json:"ID"`
@@ -43,31 +18,15 @@ type License struct {
 	EarlyTerminationInitiator string     `json:"earlyTerminationInitiator"`
 }
 
-func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response {
-	function, args := APIStub.GetFunctionAndParameters()
-	switch function {
-	case "Mint":
-		return s.Mint(args[0], args[1], args[2], args[3], args[4])
-	case "OwnerOf":
-		res, _ := s.OwnerOf(args[0], args[1])
-		return res
-	case "InitiateTermination":
-		return s.InitiateTermination(args[0], args[1], args[2])
-	case "ApproveTermination":
-		return s.ApproveTermination(args[0], args[1], args[2])
-	case "SetURL":
-		return s.setURL(args[0], args[1], args[2])
-	case "ReadAsset":
-		res, _ := s.ReadAsset(args[0], args[1], args[2])
-		return res
-	}
-	return "Invalid function call"
-}
-
 // Mint creates a new license and stores it in world state with given id
-func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, copyright *Copyright, to string, id string, description string) error {
+func (s *SmartContract) MintLicense(ctx contractapi.TransactionContextInterface, copyrightID string, to string, id string, description string) error {
+	copyright, err := s.ReadCopyright(ctx, copyrightID)
+	if err != nil {
+		return fmt.Errorf("Copyright with ID: %v does not exist", copyrightID)
+	}
+
 	var asset License
-	err := json.Unmarshal([]byte(description), &asset)
+	err = json.Unmarshal([]byte(description), &asset)
 	if err != nil {
 		return fmt.Errorf("asset description format incorrect")
 	}
@@ -160,7 +119,7 @@ func (s *SmartContract) ApproveTermination(ctx contractapi.TransactionContextInt
 }
 
 // SetURL acts as a one-time setter to bind a license to a legal contract
-func (s *SmartContract) setURL(ctx contractapi.TransactionContextInterface, tokenId string, url string) error {
+func (s *SmartContract) SetURL(ctx contractapi.TransactionContextInterface, tokenId string, url string) error {
 	assetJSON, err := ctx.GetStub().GetState(tokenId)
 	if err != nil {
 		return fmt.Errorf("failed to read from world state: %v", err)
@@ -187,7 +146,7 @@ func (s *SmartContract) setURL(ctx contractapi.TransactionContextInterface, toke
 }
 
 // ReadAsset returns the asset stored in the world state with given id.
-func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, id string) (*License, error) {
+func (s *SmartContract) ReadLicense(ctx contractapi.TransactionContextInterface, id string) (*License, error) {
 	assetJSON, err := ctx.GetStub().GetState(id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read from world state: %v", err)
@@ -206,7 +165,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, i
 }
 
 // AssetExists returns true when asset with given ID exists in world state
-func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface, id string) (bool, error) {
+func (s *SmartContract) LicenseExists(ctx contractapi.TransactionContextInterface, id string) (bool, error) {
 	assetJSON, err := ctx.GetStub().GetState(id)
 	if err != nil {
 		return false, fmt.Errorf("failed to read from world state: %v", err)

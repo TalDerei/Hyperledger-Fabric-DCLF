@@ -1,4 +1,4 @@
-package chaincode
+package dclf
 
 import (
 	"encoding/json"
@@ -8,12 +8,12 @@ import (
 )
 
 type PermissionedAddress struct {
-	Address      []byte   `json:address`
-	OwnedContent []string `json:ownedContent`
+	Address      string   `json:"address"`
+	OwnedContent []string `json:"ownedContent"`
 }
 
 // AddPermissionedAddress adds a new newly-permissioned address to the world state
-func (s *SmartContract) AddPermissionedAddress(ctx contractapi.TransactionContextInterface, addr []byte) error {
+func (s *SmartContract) AddPermissionedAddress(ctx contractapi.TransactionContextInterface, addr string) error {
 	address := PermissionedAddress{
 		Address: addr,
 	}
@@ -32,8 +32,8 @@ func (s *SmartContract) AddPermissionedAddress(ctx contractapi.TransactionContex
 }
 
 // DeletePermissionedAddress removes a previously permissioned address from the world state (removing persmissions)
-func (s *SmartContract) DeletePermissionedAddress(ctx contractapi.TransactionContextInterface, addr []byte) error {
-	exists, err := s.AssetExists(ctx, string(addr))
+func (s *SmartContract) DeletePermissionedAddress(ctx contractapi.TransactionContextInterface, addr string) error {
+	exists, err := s.PermissionedAddressExists(ctx, addr)
 	if err != nil {
 		return err
 	}
@@ -45,8 +45,8 @@ func (s *SmartContract) DeletePermissionedAddress(ctx contractapi.TransactionCon
 }
 
 // GetPermissionedAddress returns a permissioned address from world state
-func (s *SmartContract) GetPermissionedAddress(ctx contractapi.TransactionContextInterface, addr []byte) (bool, error) {
-	addressJSON, err := ctx.GetStub().GetState(string(addr))
+func (s *SmartContract) GetPermissionedAddress(ctx contractapi.TransactionContextInterface, addr string) (bool, error) {
+	addressJSON, err := ctx.GetStub().GetState(addr)
 	if err != nil {
 		return false, fmt.Errorf("failed to read from world state: %v", err)
 	}
@@ -55,7 +55,16 @@ func (s *SmartContract) GetPermissionedAddress(ctx contractapi.TransactionContex
 }
 
 // IsPermissionedAddress returns true if the passed address exists in world state, false if not
-func (s *SmartContract) IsPermissionedAddress(ctx contractapi.TransactionContextInterface, addr []byte) bool {
-	exists, _ := s.AssetExists(ctx, string(addr))
+func (s *SmartContract) IsPermissionedAddress(ctx contractapi.TransactionContextInterface, addr string) bool {
+	exists, _ := s.PermissionedAddressExists(ctx, addr)
 	return exists
+}
+
+func (s *SmartContract) PermissionedAddressExists(ctx contractapi.TransactionContextInterface, addr string) (bool, error) {
+	assetJSON, err := ctx.GetStub().GetState(addr)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+
+	return assetJSON != nil, nil
 }

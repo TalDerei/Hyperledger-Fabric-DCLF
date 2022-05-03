@@ -1,18 +1,11 @@
-package chaincode
+package dclf
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	sc "github.com/hyperledger/fabric/protos/peer"
 )
-
-// SmartContract provides functions for managing an Asset
-type SmartContract struct {
-	contractapi.Contract
-}
 
 type TrackInfo struct {
 	Title   string   `json:"title"`
@@ -28,7 +21,7 @@ type Copyright struct {
 	RegistrationNumber   string     `json:"registrationNumber"`
 	RegistrationDate     string     `json:"registrationDate"`
 	Owner                string     `json:"owner"`
-	Track                *TrackInfo `json:"track`
+	Track                *TrackInfo `json:"track"`
 	LegalContractURL     string     `json:"legalContractUrl"`
 	AlternativeSourceURL string     `json:"alternativeSourceURL"`
 }
@@ -73,42 +66,9 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 
-// Invoke routes incoming requests to this smart contract to the proper function
-func (s *SmartContract) Invoke(APIStub shim.ChaincodeStubInterface) sc.Response {
-	function, args := APIStub.GetFunctionAndParameters()
-	switch function {
-	case "Mint":
-		return s.Mint(args[0], args[1], args[2])
-	case "ReadAsset":
-		res, _ := s.ReadAsset(args[0], args[1])
-		return res
-	case "UpdateRegistrationNumber":
-		return s.UpdateRegistrationNumber(args[0], args[1], args[2])
-	case "UpdateRegistrationDate":
-		return s.UpdateRegistrationDate(args[0], args[1], args[2])
-	case "AddAuthor":
-		return s.AddAuthor(args[0], args[1], args[2])
-	case "UpdateLegalContractURL":
-		return s.UpdateLegalContractURL(args[0], args[1], args[2])
-	case "UpdateAlternativeSourceURL":
-		return s.UpdateAlternativeSourceURL(args[0], args[1], args[2])
-	case "DeleteAsset":
-		return s.DeleteAsset(args[0], args[1])
-	case "AssetExists":
-		res, _ := s.AssetExists(args[0], args[1])
-		return res
-	case "TransferAsset":
-		return s.TransferAsset(args[0], args[1], args[2], args[3])
-	case "GetAllAssets":
-		res, _ := s.GetAllAssets(args[0])
-		return res
-	}
-	return "Invalid function call"
-}
-
 // Mint creates a new copyright and stores it in world state with given id
-func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, id string, description string) error {
-	exists, err := s.AssetExists(ctx, id)
+func (s *SmartContract) MintCopyright(ctx contractapi.TransactionContextInterface, id string, description string) error {
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -127,7 +87,7 @@ func (s *SmartContract) Mint(ctx contractapi.TransactionContextInterface, id str
 }
 
 // ReadAsset returns the asset stored in the world state with given id.
-func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, id string) (*Copyright, error) {
+func (s *SmartContract) ReadCopyright(ctx contractapi.TransactionContextInterface, id string) (*Copyright, error) {
 	assetJSON, err := ctx.GetStub().GetState(id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read from world state: %v", err)
@@ -147,7 +107,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, i
 
 //SETTERS FOR COPYRIGHT FILEDS. TO BE REMOVED LATER
 func (s *SmartContract) UpdateRegistrationNumber(ctx contractapi.TransactionContextInterface, id string, registrationNumber string) error {
-	exists, err := s.AssetExists(ctx, id)
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -155,7 +115,7 @@ func (s *SmartContract) UpdateRegistrationNumber(ctx contractapi.TransactionCont
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	asset, err := s.ReadAsset(ctx, id)
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -170,7 +130,7 @@ func (s *SmartContract) UpdateRegistrationNumber(ctx contractapi.TransactionCont
 }
 
 func (s *SmartContract) UpdateRegistrationDate(ctx contractapi.TransactionContextInterface, id string, registrationDate string) error {
-	exists, err := s.AssetExists(ctx, id)
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -178,7 +138,7 @@ func (s *SmartContract) UpdateRegistrationDate(ctx contractapi.TransactionContex
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	asset, err := s.ReadAsset(ctx, id)
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -193,7 +153,7 @@ func (s *SmartContract) UpdateRegistrationDate(ctx contractapi.TransactionContex
 }
 
 func (s *SmartContract) AddAuthor(ctx contractapi.TransactionContextInterface, id string, newAuthor string) error {
-	exists, err := s.AssetExists(ctx, id)
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -201,7 +161,7 @@ func (s *SmartContract) AddAuthor(ctx contractapi.TransactionContextInterface, i
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	asset, err := s.ReadAsset(ctx, id)
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -216,7 +176,7 @@ func (s *SmartContract) AddAuthor(ctx contractapi.TransactionContextInterface, i
 }
 
 func (s *SmartContract) UpdateLegalContractURL(ctx contractapi.TransactionContextInterface, id string, legalContractURL string) error {
-	exists, err := s.AssetExists(ctx, id)
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -224,7 +184,7 @@ func (s *SmartContract) UpdateLegalContractURL(ctx contractapi.TransactionContex
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	asset, err := s.ReadAsset(ctx, id)
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -239,7 +199,7 @@ func (s *SmartContract) UpdateLegalContractURL(ctx contractapi.TransactionContex
 }
 
 func (s *SmartContract) UpdateAlternativeSourceURL(ctx contractapi.TransactionContextInterface, id string, alternativeSourceURL string) error {
-	exists, err := s.AssetExists(ctx, id)
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -247,7 +207,7 @@ func (s *SmartContract) UpdateAlternativeSourceURL(ctx contractapi.TransactionCo
 		return fmt.Errorf("the asset %s does not exist", id)
 	}
 
-	asset, err := s.ReadAsset(ctx, id)
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -262,8 +222,8 @@ func (s *SmartContract) UpdateAlternativeSourceURL(ctx contractapi.TransactionCo
 }
 
 // DeleteAsset deletes an given asset from the world state.
-func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface, id string) error {
-	exists, err := s.AssetExists(ctx, id)
+func (s *SmartContract) DeleteCopyright(ctx contractapi.TransactionContextInterface, id string) error {
+	exists, err := s.CopyrightExists(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -275,7 +235,7 @@ func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface,
 }
 
 // AssetExists returns true when asset with given ID exists in world state
-func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface, id string) (bool, error) {
+func (s *SmartContract) CopyrightExists(ctx contractapi.TransactionContextInterface, id string) (bool, error) {
 	assetJSON, err := ctx.GetStub().GetState(id)
 	if err != nil {
 		return false, fmt.Errorf("failed to read from world state: %v", err)
@@ -285,8 +245,8 @@ func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface,
 }
 
 // TransferAsset updates the owner field of asset with given id in world state.
-func (s *SmartContract) TransferAsset(ctx contractapi.TransactionContextInterface, id string, newOwner string, callerAddress string) error {
-	asset, err := s.ReadAsset(ctx, id)
+func (s *SmartContract) TransferCopyright(ctx contractapi.TransactionContextInterface, id string, newOwner string, callerAddress string) error {
+	asset, err := s.ReadCopyright(ctx, id)
 	if err != nil {
 		return err
 	}
