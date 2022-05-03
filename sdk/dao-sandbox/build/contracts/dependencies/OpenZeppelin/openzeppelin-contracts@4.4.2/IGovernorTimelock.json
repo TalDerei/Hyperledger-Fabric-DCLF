@@ -613,32 +613,32 @@
     }
   ],
   "allSourcePaths": {
-    "10": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/governance/extensions/IGovernorTimelock.sol",
-    "27": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/utils/introspection/IERC165.sol",
-    "4": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/governance/IGovernor.sol"
+    "24": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/utils/introspection/IERC165.sol",
+    "3": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/governance/IGovernor.sol",
+    "9": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/governance/extensions/IGovernorTimelock.sol"
   },
   "ast": {
-    "absolutePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/governance/extensions/IGovernorTimelock.sol",
+    "absolutePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/governance/extensions/IGovernorTimelock.sol",
     "exportedSymbols": {
       "ERC165": [
-        6425
+        3140
       ],
       "IERC165": [
-        7191
+        5302
       ],
       "IGovernor": [
-        5752
+        2039
       ],
       "IGovernorTimelock": [
-        6466
+        4353
       ]
     },
-    "id": 6467,
+    "id": 4354,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 6427,
+        "id": 4314,
         "literals": [
           "solidity",
           "^",
@@ -646,17 +646,17 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:10"
+        "src": "112:23:9"
       },
       {
-        "absolutePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/governance/IGovernor.sol",
+        "absolutePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/governance/IGovernor.sol",
         "file": "../IGovernor.sol",
-        "id": 6428,
+        "id": 4315,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 6467,
-        "sourceUnit": 5753,
-        "src": "58:26:10",
+        "scope": 4354,
+        "sourceUnit": 2040,
+        "src": "137:26:9",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -665,57 +665,57 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 6430,
+              "id": 4317,
               "name": "IGovernor",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 5752,
-              "src": "233:9:10"
+              "referencedDeclaration": 2039,
+              "src": "312:9:9"
             },
-            "id": 6431,
+            "id": 4318,
             "nodeType": "InheritanceSpecifier",
-            "src": "233:9:10"
+            "src": "312:9:9"
           }
         ],
         "canonicalName": "IGovernorTimelock",
         "contractDependencies": [],
         "contractKind": "contract",
         "documentation": {
-          "id": 6429,
+          "id": 4316,
           "nodeType": "StructuredDocumentation",
-          "src": "86:107:10",
+          "src": "165:107:9",
           "text": " @dev Extension of the {IGovernor} for timelock supporting modules.\n _Available since v4.3._"
         },
         "fullyImplemented": false,
-        "id": 6466,
+        "id": 4353,
         "linearizedBaseContracts": [
-          6466,
-          5752,
-          7191
+          4353,
+          2039,
+          5302
         ],
         "name": "IGovernorTimelock",
-        "nameLocation": "212:17:10",
+        "nameLocation": "291:17:9",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "anonymous": false,
-            "id": 6437,
+            "id": 4324,
             "name": "ProposalQueued",
-            "nameLocation": "255:14:10",
+            "nameLocation": "334:14:9",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 6436,
+              "id": 4323,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6433,
+                  "id": 4320,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "proposalId",
-                  "nameLocation": "278:10:10",
+                  "nameLocation": "357:10:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6437,
-                  "src": "270:18:10",
+                  "scope": 4324,
+                  "src": "349:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -723,10 +723,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 6432,
+                    "id": 4319,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "270:7:10",
+                    "src": "349:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -736,14 +736,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 6435,
+                  "id": 4322,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "eta",
-                  "nameLocation": "298:3:10",
+                  "nameLocation": "377:3:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6437,
-                  "src": "290:11:10",
+                  "scope": 4324,
+                  "src": "369:11:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -751,10 +751,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 6434,
+                    "id": 4321,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "290:7:10",
+                    "src": "369:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -763,38 +763,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "269:33:10"
+              "src": "348:33:9"
             },
-            "src": "249:54:10"
+            "src": "328:54:9"
           },
           {
             "functionSelector": "d33219b4",
-            "id": 6442,
+            "id": 4329,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "timelock",
-            "nameLocation": "318:8:10",
+            "nameLocation": "397:8:9",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 6438,
+              "id": 4325,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "326:2:10"
+              "src": "405:2:9"
             },
             "returnParameters": {
-              "id": 6441,
+              "id": 4328,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6440,
+                  "id": 4327,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6442,
-                  "src": "358:7:10",
+                  "scope": 4329,
+                  "src": "437:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -802,10 +802,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 6439,
+                    "id": 4326,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "358:7:10",
+                    "src": "437:7:9",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -815,36 +815,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "357:9:10"
+              "src": "436:9:9"
             },
-            "scope": 6466,
-            "src": "309:58:10",
+            "scope": 4353,
+            "src": "388:58:9",
             "stateMutability": "view",
             "virtual": true,
             "visibility": "public"
           },
           {
             "functionSelector": "ab58fb8e",
-            "id": 6449,
+            "id": 4336,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "proposalEta",
-            "nameLocation": "382:11:10",
+            "nameLocation": "461:11:9",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 6445,
+              "id": 4332,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6444,
+                  "id": 4331,
                   "mutability": "mutable",
                   "name": "proposalId",
-                  "nameLocation": "402:10:10",
+                  "nameLocation": "481:10:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6449,
-                  "src": "394:18:10",
+                  "scope": 4336,
+                  "src": "473:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -852,10 +852,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 6443,
+                    "id": 4330,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "394:7:10",
+                    "src": "473:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -864,21 +864,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "393:20:10"
+              "src": "472:20:9"
             },
             "returnParameters": {
-              "id": 6448,
+              "id": 4335,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6447,
+                  "id": 4334,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6449,
-                  "src": "443:7:10",
+                  "scope": 4336,
+                  "src": "522:7:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -886,10 +886,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 6446,
+                    "id": 4333,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "443:7:10",
+                    "src": "522:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -898,36 +898,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "442:9:10"
+              "src": "521:9:9"
             },
-            "scope": 6466,
-            "src": "373:79:10",
+            "scope": 4353,
+            "src": "452:79:9",
             "stateMutability": "view",
             "virtual": true,
             "visibility": "public"
           },
           {
             "functionSelector": "160cbed7",
-            "id": 6465,
+            "id": 4352,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "queue",
-            "nameLocation": "467:5:10",
+            "nameLocation": "546:5:9",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 6461,
+              "id": 4348,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6452,
+                  "id": 4339,
                   "mutability": "mutable",
                   "name": "targets",
-                  "nameLocation": "499:7:10",
+                  "nameLocation": "578:7:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6465,
-                  "src": "482:24:10",
+                  "scope": 4352,
+                  "src": "561:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -936,19 +936,19 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 6450,
+                      "id": 4337,
                       "name": "address",
                       "nodeType": "ElementaryTypeName",
-                      "src": "482:7:10",
+                      "src": "561:7:9",
                       "stateMutability": "nonpayable",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
                       }
                     },
-                    "id": 6451,
+                    "id": 4338,
                     "nodeType": "ArrayTypeName",
-                    "src": "482:9:10",
+                    "src": "561:9:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
                       "typeString": "address[]"
@@ -958,13 +958,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 6455,
+                  "id": 4342,
                   "mutability": "mutable",
                   "name": "values",
-                  "nameLocation": "533:6:10",
+                  "nameLocation": "612:6:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6465,
-                  "src": "516:23:10",
+                  "scope": 4352,
+                  "src": "595:23:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -973,18 +973,18 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 6453,
+                      "id": 4340,
                       "name": "uint256",
                       "nodeType": "ElementaryTypeName",
-                      "src": "516:7:10",
+                      "src": "595:7:9",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "id": 6454,
+                    "id": 4341,
                     "nodeType": "ArrayTypeName",
-                    "src": "516:9:10",
+                    "src": "595:9:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                       "typeString": "uint256[]"
@@ -994,13 +994,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 6458,
+                  "id": 4345,
                   "mutability": "mutable",
                   "name": "calldatas",
-                  "nameLocation": "564:9:10",
+                  "nameLocation": "643:9:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6465,
-                  "src": "549:24:10",
+                  "scope": 4352,
+                  "src": "628:24:9",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -1009,18 +1009,18 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 6456,
+                      "id": 4343,
                       "name": "bytes",
                       "nodeType": "ElementaryTypeName",
-                      "src": "549:5:10",
+                      "src": "628:5:9",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bytes_storage_ptr",
                         "typeString": "bytes"
                       }
                     },
-                    "id": 6457,
+                    "id": 4344,
                     "nodeType": "ArrayTypeName",
-                    "src": "549:7:10",
+                    "src": "628:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
                       "typeString": "bytes[]"
@@ -1030,13 +1030,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 6460,
+                  "id": 4347,
                   "mutability": "mutable",
                   "name": "descriptionHash",
-                  "nameLocation": "591:15:10",
+                  "nameLocation": "670:15:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6465,
-                  "src": "583:23:10",
+                  "scope": 4352,
+                  "src": "662:23:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1044,10 +1044,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 6459,
+                    "id": 4346,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "583:7:10",
+                    "src": "662:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -1056,21 +1056,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "472:140:10"
+              "src": "551:140:9"
             },
             "returnParameters": {
-              "id": 6464,
+              "id": 4351,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 6463,
+                  "id": 4350,
                   "mutability": "mutable",
                   "name": "proposalId",
-                  "nameLocation": "645:10:10",
+                  "nameLocation": "724:10:9",
                   "nodeType": "VariableDeclaration",
-                  "scope": 6465,
-                  "src": "637:18:10",
+                  "scope": 4352,
+                  "src": "716:18:9",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1078,10 +1078,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 6462,
+                    "id": 4349,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "637:7:10",
+                    "src": "716:7:9",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1090,21 +1090,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "636:20:10"
+              "src": "715:20:9"
             },
-            "scope": 6466,
-            "src": "458:199:10",
+            "scope": 4353,
+            "src": "537:199:9",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 6467,
-        "src": "194:465:10",
+        "scope": 4354,
+        "src": "273:465:9",
         "usedErrors": []
       }
     ],
-    "src": "33:627:10"
+    "src": "112:627:9"
   },
   "bytecode": "",
   "bytecodeSha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
@@ -1122,8 +1122,8 @@
     "statements": {}
   },
   "dependencies": [
-    "OpenZeppelin/openzeppelin-contracts@4.3.2/IERC165",
-    "OpenZeppelin/openzeppelin-contracts@4.3.2/IGovernor"
+    "OpenZeppelin/openzeppelin-contracts@4.4.2/IERC165",
+    "OpenZeppelin/openzeppelin-contracts@4.4.2/IGovernor"
   ],
   "deployedBytecode": "",
   "deployedSourceMap": "",
@@ -1133,7 +1133,7 @@
     "kind": "dev",
     "methods": {
       "COUNTING_MODE()": {
-        "details": "A description of the possible `support` values for {castVote} and the way these votes are counted, meant to be consumed by UIs to show correct vote options and interpret the results. The string is a URL-encoded sequence of key-value pairs that each describe one aspect, for example `support=bravo&quorum=for,abstain`. There are 2 standard keys: `support` and `quorum`. - `support=bravo` refers to the vote options 0 = For, 1 = Against, 2 = Abstain, as in `GovernorBravo`. - `quorum=bravo` means that only For votes are counted towards quorum. - `quorum=for,abstain` means that both For and Abstain votes are counted towards quorum. NOTE: The string can be decoded by the standard https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams[`URLSearchParams`] JavaScript class.",
+        "details": "A description of the possible `support` values for {castVote} and the way these votes are counted, meant to be consumed by UIs to show correct vote options and interpret the results. The string is a URL-encoded sequence of key-value pairs that each describe one aspect, for example `support=bravo&quorum=for,abstain`. There are 2 standard keys: `support` and `quorum`. - `support=bravo` refers to the vote options 0 = Against, 1 = For, 2 = Abstain, as in `GovernorBravo`. - `quorum=bravo` means that only For votes are counted towards quorum. - `quorum=for,abstain` means that both For and Abstain votes are counted towards quorum. NOTE: The string can be decoded by the standard https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams[`URLSearchParams`] JavaScript class.",
         "notice": "module:voting"
       },
       "castVote(uint256,uint8)": {
@@ -1165,11 +1165,11 @@
         "notice": "module:core"
       },
       "proposalDeadline(uint256)": {
-        "details": "timestamp at which votes close.",
+        "details": "Block number at which votes close. Votes close at the end of this block, so it is possible to cast a vote during this block.",
         "notice": "module:core"
       },
       "proposalSnapshot(uint256)": {
-        "details": "block number used to retrieve user's votes and quorum.",
+        "details": "Block number used to retrieve user's votes and quorum. As per Compound's Comp and OpenZeppelin's ERC20Votes, the snapshot is performed at the end of this block. Hence, voting for this proposal starts at the beginning of the following block.",
         "notice": "module:core"
       },
       "propose(address[],uint256[],bytes[],string)": {
@@ -1191,25 +1191,25 @@
         "notice": "module:core"
       },
       "votingDelay()": {
-        "details": "delay, in number of block, between the proposal is created and the vote starts. This can be increassed to leave time for users to buy voting power, of delegate it, before the voting of a proposal starts.",
+        "details": "Delay, in number of block, between the proposal is created and the vote starts. This can be increassed to leave time for users to buy voting power, of delegate it, before the voting of a proposal starts.",
         "notice": "module:user-config"
       },
       "votingPeriod()": {
-        "details": "delay, in number of blocks, between the vote start and vote ends. Note: the {votingDelay} can delay the start of the vote. This must be considered when setting the voting duration compared to the voting delay.",
+        "details": "Delay, in number of blocks, between the vote start and vote ends. NOTE: The {votingDelay} can delay the start of the vote. This must be considered when setting the voting duration compared to the voting delay.",
         "notice": "module:user-config"
       }
     },
     "version": 1
   },
   "offset": [
-    194,
-    659
+    273,
+    738
   ],
   "opcodes": "",
   "pcMap": {},
-  "sha1": "a93f1f4073d577f8e4f93ced205fa69113f431e1",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"../IGovernor.sol\";\n\n/**\n * @dev Extension of the {IGovernor} for timelock supporting modules.\n *\n * _Available since v4.3._\n */\nabstract contract IGovernorTimelock is IGovernor {\n    event ProposalQueued(uint256 proposalId, uint256 eta);\n\n    function timelock() public view virtual returns (address);\n\n    function proposalEta(uint256 proposalId) public view virtual returns (uint256);\n\n    function queue(\n        address[] memory targets,\n        uint256[] memory values,\n        bytes[] memory calldatas,\n        bytes32 descriptionHash\n    ) public virtual returns (uint256 proposalId);\n}\n",
+  "sha1": "70a0f132eccd856e6ded4f881ed2848fba05b63e",
+  "source": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts v4.4.1 (governance/extensions/IGovernorTimelock.sol)\n\npragma solidity ^0.8.0;\n\nimport \"../IGovernor.sol\";\n\n/**\n * @dev Extension of the {IGovernor} for timelock supporting modules.\n *\n * _Available since v4.3._\n */\nabstract contract IGovernorTimelock is IGovernor {\n    event ProposalQueued(uint256 proposalId, uint256 eta);\n\n    function timelock() public view virtual returns (address);\n\n    function proposalEta(uint256 proposalId) public view virtual returns (uint256);\n\n    function queue(\n        address[] memory targets,\n        uint256[] memory values,\n        bytes[] memory calldatas,\n        bytes32 descriptionHash\n    ) public virtual returns (uint256 proposalId);\n}\n",
   "sourceMap": "",
-  "sourcePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.3.2/contracts/governance/extensions/IGovernorTimelock.sol",
+  "sourcePath": "/discolifr/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.4.2/contracts/governance/extensions/IGovernorTimelock.sol",
   "type": "contract"
 }
